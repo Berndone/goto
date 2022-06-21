@@ -66,7 +66,10 @@ def set_path():
 
 def list_keys():
     cfg = load_config()
-    print(cfg._paths)
+    keys = cfg._paths.keys()
+    max_key_len = max(len(k) for k in keys)
+    for key in sorted(keys):
+        print(f"{key:{max_key_len}}: {cfg._paths[key]}")
 
 
 def print_cd_path():
