@@ -3,7 +3,7 @@ import sys
 import argparse
 import enum
 from gotolib.config import Config
-import path
+from path import Path
 
 # TODO: Use a format which can be viewed/edited by a human being.
 import pickle
@@ -28,6 +28,9 @@ parser.add_argument(
 parser.add_argument(
     "-p", "--path", type=str,
 )
+parser.add_argument(
+    "params", type=str, nargs="*", default=list(),
+)
 
 args = parser.parse_args()
 # print(args)
@@ -40,7 +43,7 @@ if cmd is CMDChoices.SET:
     if args.key is None or args.path is None:
         parser.error("prepare-cd requires --key and --path")
 
-config_file_path = path.Path("~/.config/goto-config.pickle").expand()
+config_file_path = Path("~/.config/goto-config.pickle").expand()
 
 
 def load_config() -> Config:
@@ -75,12 +78,14 @@ def list_keys():
 def print_cd_path():
     cfg = load_config()
     key = args.key
+    params = args.params
     try:
         path = cfg.get_path(key)
     except KeyError:
         print(f"Unknown key {key}", file=sys.stdout)
         return 1
 
+    path = Path(path.format(*params))
     if not path.exists():
         print(f"Path '{path}' does not exist", file=sys.stdout)
         return 1

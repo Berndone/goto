@@ -1,5 +1,5 @@
 goto() {
-    cmd=$(gotocfg.py prepare-cd -k "$1")
+    cmd=$(gotocfg.py -k "$1" prepare-cd ${@:2})
     echo "$cmd"
     if [ ${cmd:0:2} = "cd" ]
     then
