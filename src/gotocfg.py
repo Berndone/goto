@@ -13,6 +13,7 @@ class CMDChoices(enum.Enum):
     CD = "prepare-cd"
     SET = "set-path"
     LIST = "list-paths"
+    REMOVE = "remove-path"
 
     def __str__(self):
         return self.value
@@ -67,6 +68,13 @@ def set_path():
     save_config(cfg)
 
 
+def remove_path():
+    cfg = load_config()
+    key = args.key
+    cfg.remove_path(key)
+    save_config(cfg)
+
+
 def list_keys():
     cfg = load_config()
     keys = cfg._paths.keys()
@@ -99,6 +107,8 @@ elif cmd is CMDChoices.SET:
     err = set_path()
 elif cmd is CMDChoices.LIST:
     err = list_keys()
+elif cmd is CMDChoices.REMOVE:
+    err = remove_path()
 else:
     raise NotImplementedError()
 

@@ -27,3 +27,6 @@ class Config(object):
 
     def set_path(self, key, path: str):
         self._paths[key] = path
+
+    def remove_path(self, key) -> None:
+        self._paths.pop(key, None)

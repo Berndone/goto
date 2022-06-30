@@ -19,3 +19,6 @@ goto-add-current() {
     gotocfg.py set-path -k "$1" -p "$(pwd)"
 }
 
+goto-remove() {
+    gotocfg.py remove-path -k "$1"
+}
