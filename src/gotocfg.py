@@ -12,6 +12,7 @@ import pickle
 class CMDChoices(enum.Enum):
     CD = "prepare-cd"
     SET = "set-path"
+    GET = "get-path"
     LIST = "list-paths"
     REMOVE = "remove-path"
 
@@ -68,6 +69,20 @@ def set_path():
     save_config(cfg)
 
 
+def get_path():
+    cfg = load_config()
+    key = args.key
+    params = args.params
+    try:
+        path = cfg.get_path(key)
+    except KeyError:
+        print(f"Unknown key {key}", file=sys.stderr)
+        return 1
+
+    path = Path(path.format(*params))
+    print(path)
+
+
 def remove_path():
     cfg = load_config()
     key = args.key
@@ -90,12 +105,12 @@ def print_cd_path():
     try:
         path = cfg.get_path(key)
     except KeyError:
-        print(f"Unknown key {key}", file=sys.stdout)
+        print(f"Unknown key {key}", file=sys.stderr)
         return 1
 
     path = Path(path.format(*params))
     if not path.exists():
-        print(f"Path '{path}' does not exist", file=sys.stdout)
+        print(f"Path '{path}' does not exist", file=sys.stderr)
         return 1
 
     print(f'cd "{path}"')
@@ -105,6 +120,8 @@ if cmd is CMDChoices.CD:
     err = print_cd_path()
 elif cmd is CMDChoices.SET:
     err = set_path()
+elif cmd is CMDChoices.GET:
+    err = get_path()
 elif cmd is CMDChoices.LIST:
     err = list_keys()
 elif cmd is CMDChoices.REMOVE:

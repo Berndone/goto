@@ -1,5 +1,5 @@
 goto() {
-    cmd=$(gotocfg.py -k "$1" prepare-cd ${@:2})
+    cmd=$(gotocfg.py -k "$1" prepare-cd ${@:2}) || return
     echo "$cmd"
     if [ ${cmd:0:2} = "cd" ]
     then
@@ -21,4 +21,8 @@ goto-add-current() {
 
 goto-remove() {
     gotocfg.py remove-path -k "$1"
+}
+
+goto-clip() {
+    gotocfg.py -k "$1" get-path ${@:2} | xclip -selection clipboard
 }
